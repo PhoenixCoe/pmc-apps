@@ -1,4 +1,5 @@
 'use client';
+import { UiIcon } from './icons';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { clearSaved, DEFAULTS, readPrefs, savePref, type Prefs } from '@/lib/prefs';
@@ -28,7 +29,7 @@ export function SettingsView() {
     <div className="settings">
       {AUTH_ENABLED && (
         <section className="set" aria-labelledby="s-acct">
-          <h2 className="d" id="s-acct">Account</h2>
+          <h2 className="d" id="s-acct"><UiIcon name="user" size={26} />Account</h2>
           {user ? (
             <div className="opt">
               <div className="opt-t acct-line"><Avatar user={user} /><span><b className="d">{user.name || 'Signed in'}</b><small className="tx">{user.email}</small></span></div>
@@ -44,7 +45,7 @@ export function SettingsView() {
       )}
 
       <section className="set" aria-labelledby="s-look">
-        <h2 className="d" id="s-look">How it looks</h2>
+        <h2 className="d" id="s-look"><UiIcon name="look" size={26} />How it looks</h2>
         <Choice label="Text size" name="text" value={p.text} onPick={pick} options={[{ v: 'normal', text: 'Normal' }, { v: 'large', text: 'Large' }]} />
         <Choice label="Loading screen" hint="The moving blocks shown while a big app loads." name="loader" value={p.loader} onPick={pick}
           options={[{ v: 'full', text: 'Full' }, { v: 'quick', text: 'Quick' }, { v: 'off', text: 'Off' }]} />
@@ -52,7 +53,7 @@ export function SettingsView() {
       </section>
 
       <section className="set" aria-labelledby="s-data">
-        <h2 className="d" id="s-data">Saved data</h2>
+        <h2 className="d" id="s-data"><UiIcon name="trash" size={26} />Saved data</h2>
         <div className="opt">
           <div className="opt-t"><b className="d">Clear everything saved here</b><small className="tx">These settings, and anything the apps remembered, such as text you were working on.</small></div>
           <button type="button" className="btn small" onClick={() => { const n = clearSaved(); setCleared(n); setP(readPrefs()); }}>Clear</button>

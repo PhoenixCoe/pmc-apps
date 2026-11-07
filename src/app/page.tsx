@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { HomeGroups } from '@/components/shared/HomeGroups';
+import { Belt, Halftone } from '@/components/shared/Belt';
+import { Surprise } from '@/components/shared/Surprise';
+import { Browse } from '@/components/shared/Browse';
 import { AppIcon } from '@/components/shared/icons';
 import { JsonLd } from '@/components/shared/JsonLd';
 import { RecentList } from '@/components/shared/Recent';
@@ -26,22 +28,38 @@ export default function Home() {
   return (
     <>
       <section className="start" aria-labelledby="start-title">
-        <h1 id="start-title" className="d">{ready.length} free tools</h1>
-        <AppSearch variant="hero" />
-        <ul className="jobs">
-          {jobs.map(({ say, a }) => (
-            <li key={a.slug}>
-              <Link href={a.href} className="job" data-g={a.key}>
-                <span className="ic"><AppIcon slug={a.slug} size={44} still /></span>
-                <b className="d">{say}</b>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Halftone className="ht-tr" />
+        <div className="wrap start-in">
+          <h1 id="start-title" className="d">{ready.length} free tools</h1>
+          <p className="for d" aria-hidden>
+            for
+            <span className="cyc">
+              <b data-g="text">text</b><b data-g="file">pictures</b><b data-g="prod">homework</b><b data-g="dev">code</b><b data-g="biz">your site</b><b data-g="file">PDFs</b>
+            </span>
+          </p>
+          <div className="start-row">
+            <AppSearch variant="hero" />
+            <Surprise hrefs={searchIndex.map((a) => a.href)} />
+          </div>
+        </div>
       </section>
+      <Belt items={searchIndex.slice(0, 40).map((a) => ({ slug: a.slug, title: a.title, key: a.key }))} />
       <div className="wrap body">
         <RecentList apps={searchIndex.map((a) => ({ slug: a.slug, title: a.title, href: a.href }))} />
-        <HomeGroups groups={groupList} />
+        <section className="picks" aria-labelledby="picks-title">
+          <h2 id="picks-title" className="d">Start here</h2>
+          <ul className="jobs">
+            {jobs.map(({ say, a }) => (
+              <li key={a.slug}>
+                <Link href={a.href} className="job" data-g={a.key}>
+                  <span className="ic"><AppIcon slug={a.slug} size={44} still /></span>
+                  <b className="d">{say}</b>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <Browse groups={groupList} />
       </div>
       <JsonLd data={homeJsonLd(ready)} />
     </>

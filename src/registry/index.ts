@@ -27,7 +27,7 @@ export type AppEntry = (typeof searchIndex)[number];
 
 /** The groups, each with its apps, for the menus. */
 export const groupList = categories.map((c) => ({
-  slug: c.slug, key: c.key, name: c.name, blurb: c.blurb,
+  slug: c.slug, key: c.key, name: c.name, blurb: c.blurb, short: c.short,
   apps: searchIndex.filter((a) => a.key === c.key),
 }));
 export type GroupEntry = (typeof groupList)[number];

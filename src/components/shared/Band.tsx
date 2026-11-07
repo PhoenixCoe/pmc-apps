@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Halftone } from './Belt';
 import type { ReactNode } from 'react';
 
 /**
@@ -8,6 +9,7 @@ import type { ReactNode } from 'react';
 export function Band({ title, line, icon, g, tone, back }: { title: string; line?: string; icon?: ReactNode; g?: string; tone?: 'ink' | 'gold' | 'cream'; back?: boolean }) {
   return (
     <header className={`band${g ? ' gtone' : ''}${tone ? ` tone-${tone}` : ''}`} data-g={g}>
+      <Halftone className="ht-band" />
       {back && <div className="wrap"><Link className="back" href="/"><i className="bk" aria-hidden />All tools</Link></div>}
       <div className="wrap band-in">
         {icon && <span className="band-ic" aria-hidden>{icon}</span>}
