@@ -1,0 +1,17 @@
+export interface Unit { id: string; name: string; f: number; off?: number }   // base = value * f + off
+export interface Cat { id: string; name: string; units: Unit[] }
+const u = (id: string, name: string, f: number, off = 0): Unit => ({ id, name, f, off });
+export const CATS: Cat[] = [
+  { id: 'length', name: 'Length', units: [u('mm', 'Millimetres', 0.001), u('cm', 'Centimetres', 0.01), u('m', 'Metres', 1), u('km', 'Kilometres', 1000), u('in', 'Inches', 0.0254), u('ft', 'Feet', 0.3048), u('yd', 'Yards', 0.9144), u('mi', 'Miles', 1609.344), u('nmi', 'Nautical miles', 1852)] },
+  { id: 'mass', name: 'Mass', units: [u('mg', 'Milligrams', 1e-6), u('g', 'Grams', 0.001), u('kg', 'Kilograms', 1), u('t', 'Tonnes', 1000), u('oz', 'Ounces', 0.028349523), u('lb', 'Pounds', 0.45359237), u('st', 'Stone', 6.35029318)] },
+  { id: 'temp', name: 'Temperature', units: [u('c', 'Celsius', 1, 0), u('f', 'Fahrenheit', 5 / 9, -32 * 5 / 9), u('k', 'Kelvin', 1, -273.15)] },
+  { id: 'data', name: 'Data size', units: [u('b', 'Bytes', 1), u('kb', 'Kilobytes (1000)', 1e3), u('mb', 'Megabytes (1000²)', 1e6), u('gb', 'Gigabytes (1000³)', 1e9), u('tb', 'Terabytes (1000⁴)', 1e12), u('kib', 'Kibibytes (1024)', 1024), u('mib', 'Mebibytes (1024²)', 1048576), u('gib', 'Gibibytes (1024³)', 1073741824), u('bit', 'Bits', 0.125)] },
+  { id: 'speed', name: 'Speed', units: [u('ms', 'Metres per second', 1), u('kmh', 'Kilometres per hour', 1 / 3.6), u('mph', 'Miles per hour', 0.44704), u('kn', 'Knots', 0.514444), u('fts', 'Feet per second', 0.3048)] },
+  { id: 'area', name: 'Area', units: [u('mm2', 'Square millimetres', 1e-6), u('cm2', 'Square centimetres', 1e-4), u('m2', 'Square metres', 1), u('ha', 'Hectares', 1e4), u('km2', 'Square kilometres', 1e6), u('in2', 'Square inches', 0.00064516), u('ft2', 'Square feet', 0.09290304), u('ac', 'Acres', 4046.8564224), u('mi2', 'Square miles', 2589988.110336)] },
+  { id: 'vol', name: 'Volume', units: [u('ml', 'Millilitres', 0.001), u('l', 'Litres', 1), u('m3', 'Cubic metres', 1000), u('tsp', 'Teaspoons (US)', 0.00492892), u('tbsp', 'Tablespoons (US)', 0.0147868), u('cup', 'Cups (US)', 0.236588), u('pt', 'Pints (UK)', 0.568261), u('gal', 'Gallons (UK)', 4.54609), u('galus', 'Gallons (US)', 3.78541)] },
+  { id: 'time', name: 'Time', units: [u('s', 'Seconds', 1), u('min', 'Minutes', 60), u('h', 'Hours', 3600), u('d', 'Days', 86400), u('w', 'Weeks', 604800), u('y', 'Years', 31557600)] },
+];
+export const convert = (v: number, from: Unit, to: Unit) => ((v * from.f + (from.off ?? 0)) - (to.off ?? 0)) / to.f;
+export const fmt = (n: number) => !isFinite(n) ? '–' : n === 0 ? '0' : Math.abs(n) >= 1e12 || Math.abs(n) < 1e-6 ? n.toExponential(4) : String(+n.toPrecision(10));
+
+export const CURRENCIES: [string, string][] = [['USD', 'US dollar'], ['EUR', 'Euro'], ['GBP', 'British pound'], ['JPY', 'Japanese yen'], ['AUD', 'Australian dollar'], ['CAD', 'Canadian dollar'], ['CHF', 'Swiss franc'], ['CNY', 'Chinese yuan'], ['INR', 'Indian rupee'], ['NZD', 'New Zealand dollar'], ['SEK', 'Swedish krona'], ['NOK', 'Norwegian krone'], ['DKK', 'Danish krone'], ['PLN', 'Polish zloty'], ['CZK', 'Czech koruna'], ['HUF', 'Hungarian forint'], ['TRY', 'Turkish lira'], ['ZAR', 'South African rand'], ['BRL', 'Brazilian real'], ['MXN', 'Mexican peso'], ['SGD', 'Singapore dollar'], ['HKD', 'Hong Kong dollar'], ['KRW', 'South Korean won'], ['AED', 'UAE dirham'], ['SAR', 'Saudi riyal'], ['THB', 'Thai baht'], ['ILS', 'Israeli shekel'], ['PHP', 'Philippine peso'], ['IDR', 'Indonesian rupiah'], ['NGN', 'Nigerian naira']];
