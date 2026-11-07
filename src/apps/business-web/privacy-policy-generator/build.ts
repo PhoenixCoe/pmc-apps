@@ -1,0 +1,27 @@
+import { bullets, dateLong, type Section } from './doc';
+export interface P { name: string; site: string; email: string; place: string; collect: string[]; cookies: boolean; analytics: boolean; ads: boolean; payments: boolean; accounts: boolean; newsletter: boolean; children: boolean; share: boolean; abroad: boolean; keep: string }
+export const COLLECT: [string, string][] = [['name', 'Name'], ['email', 'Email address'], ['phone', 'Phone number'], ['address', 'Postal address'], ['payment', 'Payment details'], ['device', 'Device and browser details'], ['ip', 'IP address'], ['location', 'Location'], ['messages', 'Messages you send us']];
+export const START: P = { name: '', site: '', email: '', place: 'United Kingdom', collect: ['name', 'email', 'device'], cookies: true, analytics: true, ads: false, payments: false, accounts: false, newsletter: false, children: false, share: false, abroad: false, keep: '24 months' };
+const uk = (p: string) => /united kingdom|uk|england|scotland|wales|northern ireland/i.test(p), eu = (p: string) => /europe|eu\b|germany|france|spain|italy|ireland|netherlands|sweden|poland|portugal|belgium|austria|denmark|finland/i.test(p), us = (p: string) => /united states|usa|\bus\b|america|california/i.test(p);
+export function build(p: P): { title: string; s: Section[] } {
+  const n = p.name.trim() || '[Your name]', site = p.site.trim() || '[your website]', mail = p.email.trim() || '[your email]';
+  const labels = COLLECT.filter(([k]) => p.collect.includes(k)).map(([, l]) => l);
+  const s: Section[] = [
+    { h: 'Who we are', p: [`${n} runs ${site}. If you have a question about your information, write to ${mail}.`, `This page was last changed on ${dateLong()}.`] },
+    { h: 'What we collect', p: labels.length ? [`We may collect:`, bullets(labels).join('\n')] : ['We do not ask you for personal details.'] },
+    { h: 'Why we use it', p: [bullets([...(p.accounts ? ['To run your account'] : []), ...(p.payments ? ['To take payment and send receipts'] : []), ...(p.newsletter ? ['To send you our newsletter, if you signed up'] : []), 'To reply when you contact us', ...(p.analytics ? ['To see how the site is used and make it better'] : []), 'To keep the site safe and working', 'To follow the law']).join('\n')] },
+  ];
+  if (p.cookies || p.analytics || p.ads) s.push({ h: 'Cookies', p: ['Cookies are small files saved on your device.', bullets(['Needed cookies keep the site working.', ...(p.analytics ? ['Statistics cookies show us which pages are used, without naming you.'] : []), ...(p.ads ? ['Advertising cookies show adverts that suit you and measure how well they work.'] : [])]).join('\n'), 'You can block or delete cookies in your browser settings. Some parts of the site may stop working if you do.'] });
+  if (p.payments) s.push({ h: 'Payments', p: ['Payments are handled by a payment company. We do not see or keep your full card number.'] });
+  if (p.share || p.ads || p.analytics) s.push({ h: 'Who we share it with', p: [p.share ? 'We share information with companies that help us run the site, such as hosting, email and payment services. They may only use it for that job.' : 'We only share information with companies that help us run the site, such as hosting and statistics.', 'We do not sell your personal information.', 'We may share information if the law says we must.'] });
+  if (p.abroad) s.push({ h: 'Sending information abroad', p: ['Some of the companies we use are based in other countries. When we send information abroad, we make sure it is protected to a standard the law accepts.'] });
+  s.push({ h: 'How long we keep it', p: [`We keep personal information for ${p.keep.trim() || 'as long as we need it'}, then delete it. We may keep some records longer if the law requires it.`] });
+  s.push({ h: 'Keeping it safe', p: ['We use sensible steps to protect your information, but no website can be completely secure.'] });
+  const rights = ['See the information we hold about you', 'Ask us to correct it', 'Ask us to delete it', 'Ask us to stop using it', ...(uk(p.place) || eu(p.place) ? ['Ask for a copy you can move to another service', 'Object to how we use it'] : [])];
+  s.push({ h: 'Your rights', p: ['You can:', bullets(rights).join('\n'), `To do any of these, write to ${mail}.`, uk(p.place) ? 'If you are unhappy with our answer, you can complain to the Information Commissioner’s Office (ico.org.uk).' : eu(p.place) ? 'If you are unhappy with our answer, you can complain to the data protection authority in your country.' : us(p.place) ? 'Depending on where you live, such as California, you may have further rights. Write to us to ask.' : 'You may also be able to complain to your local data protection authority.'] });
+  s.push({ h: 'Children', p: [p.children ? 'Our site is made for children too. We ask a parent or guardian to agree before a child gives us any information, and we collect as little as we can.' : 'Our site is not made for children under 13, and we do not knowingly collect their information. If you think a child has given us information, write to us and we will delete it.'] });
+  s.push({ h: 'Other websites', p: ['Our site may link to other websites. We are not responsible for how they use your information.'] });
+  s.push({ h: 'Changes', p: ['If we change this page, we will put the new version here with a new date.'] });
+  s.push({ h: 'Contact', p: [`${n}\n${mail}`] });
+  return { title: `Privacy Policy for ${n}`, s };
+}
