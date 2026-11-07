@@ -41,7 +41,7 @@ export function AppPage({ category, slug, children }: { category: string; slug: 
           <section id="tool" className="bleed" aria-label={m.title}>{children}</section>
         </>
       ) : (
-        <Band title={m.title} line={m.tagline} g={c.key} icon={<AppIcon slug={m.slug} size={96} still={false} />} />
+        <Band back title={m.title} line={m.tagline} g={c.key} icon={<AppIcon slug={m.slug} size={96} still={false} />} />
       )}
       <div className="wrap body">
         {!m.fullbleed && <section id="tool" className="stage" aria-label={m.title}>{children}</section>}
